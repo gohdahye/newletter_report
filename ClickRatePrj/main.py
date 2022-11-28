@@ -3,9 +3,13 @@ from operator import itemgetter
 import pandas as pd
 import csv
 
+global result_s
+
+result_s = 0
 
 # extract 함수 호출되면 filename으로 된 txt파일 생성
 def extract(csv_list, custom_Index, filename):
+    global result_s
     # csv파일 list로 변환
     my_list = list(csv_list)
 
@@ -31,6 +35,7 @@ def extract(csv_list, custom_Index, filename):
             result = clean_List.count(custom_Index[num])
             writer.writerow([custom_Index[num], result])
             num = num + 1
+            result_s += result
         f.close()
         # 직무 개수 내림차순 정렬
         # 딕셔너리를 items()를 사용해서 튜플로 변환 시킨다.
@@ -58,10 +63,11 @@ def extract(csv_list, custom_Index, filename):
             result = clean_List.count(custom_Index[num])
             writer.writerow([custom_Index[num], result])
             num = num + 1
+            result_s += result
         f.close()
 
 # 엑셀 파일 추출
-file = pd.read_csv('여기에 파일을 붙여넣으세요.csv',
+file = pd.read_csv('(광고) _손에 파우더를 쥐어라_ (대실직 시대 생존법)_링크별 클릭 상세목록.csv_20221128.csv',
                    header=1, encoding='utf-8')
 
 jobIndex = ["경영·사무", "홍보·마케팅·광고", "IT·인터넷", "연구개발(R&D)·설계", "기타", "학생·취업준비", "전문 특수직", "CEO·임원", "디자인",
@@ -83,6 +89,8 @@ csv_sex = file.loc[:, '성별']
 extract(csv_job, jobIndex, "직무")
 extract(csv_age, ageIndex, "연령")
 extract(csv_sex, sexIndex, "성별")
+
+print("전체 클릭 인원수 : " , result_s)
 
 # job리스트 목록 백업용 추출
 """
